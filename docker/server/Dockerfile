@@ -1,8 +1,12 @@
-FROM php:8.0-apache
+FROM php:8.1.1-apache
 
 RUN a2enmod rewrite
 
 RUN apt-get update && apt-get install -y git unzip zip
+
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+
+RUN apt-get update && apt-get upgrade -y && apt-get install -y nodejs
 
 WORKDIR /var/www/html
 
