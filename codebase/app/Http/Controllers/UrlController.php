@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RssSource;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreRSSResourceRequest;
 
 class UrlController extends Controller
 {
@@ -13,8 +15,8 @@ class UrlController extends Controller
      */
     public function index()
     {
-        //
-        return view('urls/index');
+        $rssSources = RssSource::orderBy('id','desc')->paginate(5);
+        return view('urls.index', compact('rssSources'));
     }
 
     /**
@@ -24,29 +26,28 @@ class UrlController extends Controller
      */
     public function create()
     {
-        //
         return view('urls/create');
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param StoreRSSResourceRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRSSResourceRequest $request)
     {
-        //
-        return redirect('/urls');
+        $validated = $request->validated();
+        RssSource::create($validated);
+
+        return redirect()->route('urls.index')->with('success','RSS source has been created successfully.');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param RssSource $rssSource
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function show($id)
+    public function show(RssSource $rssSource)
     {
-        //
+        return view('urls.show',compact('rssSource'));
     }
 
     /**
@@ -76,11 +77,12 @@ class UrlController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  RssSource  $company
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(RssSource $rssSource)
     {
-        //
+        $rssSource->delete();
+        return redirect()->route('urls.index')->with('success','RSS Source has been deleted successfully');
     }
 }

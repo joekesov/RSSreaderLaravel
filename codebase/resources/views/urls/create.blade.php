@@ -1,59 +1,72 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Add new Url') }}</div>
+<div class="container mt-2">
+    @if(session('status'))
+        <div class="alert alert-success mb-1 mt-1">
+            {{ session('status') }}
+        </div>
+    @endif
+    <form action="{{ route('urls.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label for="inputName" class="col-form-label">RSS Name:</label>
+            </div>
+            <div class="col-auto">
+                <input type="text" id="inputName" class="form-control" aria-describedby="nameHelpInline">
+            </div>
+            @error('name')
+            <div class="col-auto">
+                <span id="nameHelpInline" class="form-text">
+                  {{ $message }}
+                </span>
+            </div>
+            @enderror
+        </div>
 
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label for="inputUrl" class="col-form-label">RSS URL:</label>
+            </div>
+            <div class="col-auto">
+                <input type="text" id="inputUrl" class="form-control" aria-describedby="urlHelpInline">
+            </div>
+            @error('url')
+            <div class="col-auto">
+                <span id="urlHelpInline" class="form-text">
+                  {{ $message }}
+                </span>
+            </div>
+            @enderror
+        </div>
 
-                            <form method="POST" action="/urls">
-                                @csrf
-                                <div class="mb-3">
-                                    <div class="row g-3 align-items-center">
-                                        <div class="col-md-2">
-                                            <label for="inputName" class="col-form-label">Name</label>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input type="text" id="inputName" class="form-control" aria-describedby="nameHelpInline">
-                                        </div>
-                                        <div class="col-auto">
-                                            <span id="nameHelpInline" class="form-text">
-                                              Must be 8-20 characters long.
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="row g-3 align-items-center">
-                                        <div class="col-md-2">
-                                            <label for="inputName" class="col-form-label">URL</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input type="text" id="inputName" class="form-control" aria-describedby="nameHelpInline">
-                                        </div>
-                                        <div class="col-auto">
-                                            <span id="nameHelpInline" class="form-text">
-                                              Must be 8-20 characters long.
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3 form-check">
+{{--    ------------------------------------------------------}}
 
-                                </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
-                    </div>
-                </div>
+    <div class="row">
+        <div class="col-lg-12 margin-tb">
+            <div class="pull-left mb-2">
+                <h2>Add RSS url</h2>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-primary" href="{{ route('urls.index') }}"> Back</a>
             </div>
         </div>
     </div>
+
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    <strong>RSS Name:</strong>
+                    <input type="text" name="url" class="form-control" placeholder="RSS url">
+                    @error('url')
+                    <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary ml-3">Submit</button>
+        </div>
+    </form>
+</div>
 @endsection
