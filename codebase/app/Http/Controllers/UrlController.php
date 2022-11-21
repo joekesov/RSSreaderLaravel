@@ -16,7 +16,7 @@ class UrlController extends Controller
     public function index()
     {
         $rssSources = RssSource::orderBy('id','desc')->paginate(5);
-        return view('urls.index', compact('rssSources'));
+        return view('rss.index', compact('rssSources'));
     }
 
     /**
